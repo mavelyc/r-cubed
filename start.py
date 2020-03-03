@@ -11,6 +11,9 @@ ss_fps = int(config.get('API', 'ss_fps'))
 api_key = config.get('API', 'vr_key')
 api_url = config.get('API', 'vr_url')
 
+def parse_json(json):
+    print(json["images"][0]["classifiers"][0]["classes"])
+
 def start_camera():
 
     windowName = "Live Video Feed"
@@ -45,7 +48,7 @@ def start_camera():
                     images_file=image,
                     threshold='0.6',
                     classifier_ids='DefaultCustomModel_663415636').get_result()
-                print(json.dumps(classes, indent=2))
+                parse_json(classes)
 
         
         cv2.imshow("Original Webcam Feed", frame)
