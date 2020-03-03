@@ -7,6 +7,7 @@ def main():
     windowName = "Live Video Feed"
     cv2.namedWindow(windowName)
     cap = cv2.VideoCapture(0)
+    count = 0
     flag = 0
     
     if cap.isOpened():
@@ -37,11 +38,14 @@ def main():
                     ).get_result()
                 print(json.dumps(classes, indent=2))
 
-            cv2.imshow("Original Webcam Feed", frame)
-            
+        
+        cv2.imshow("Original Webcam Feed", frame)
         
         if cv2.waitKey(1) == 27: # exit on ESC
             break
+
+        flag += 1
+        flag = flag%30
 
     cv2.destroyAllWindows()
     cap.release()
