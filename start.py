@@ -1,7 +1,11 @@
 import cv2
 import json
+import configparser
 from ibm_watson import VisualRecognitionV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+
+config = configparser.RawConfigParser()
+config.read('config.properties')
 
 def start_camera():
 
@@ -10,9 +14,6 @@ def start_camera():
     cap = cv2.VideoCapture(0)
     count = 0
     flag = 0
-
-    with open ("apikey", "r") as apikey_file:
-        api_key=apikey_file.readlines()[0]
     
     if cap.isOpened():
         ret, frame = cap.read()
@@ -27,13 +28,13 @@ def start_camera():
         
         #output = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         if flag == 0:
-            authenticator = IAMAuthenticator(api_key)
+            authenticator = IAMAuthenticator(config.get('API', 'key'))
             visual_recognition = VisualRecognitionV3(
                 version='2018-03-19',
                 authenticator=authenticator
             )
 
-            visual_recognition.set_service_url('https://api.us-south.visual-recognition.watson.cloud.ibm.com/instances/d9ed5d97-8d20-4f96-8fc7-ad2b4e337061')
+            visual_recognition.set_service_url(config.get('API', 'url'))
 
             with open('./frame.jpg', 'rb') as image:
                 classes = visual_recognition.classify(
