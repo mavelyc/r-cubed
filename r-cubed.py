@@ -9,6 +9,9 @@ def main():
     cap = cv2.VideoCapture(0)
     count = 0
     flag = 0
+
+    with open ("apikey", "r") as apikey_file:
+        api_key=apikey_file.readlines()[0]
     
     if cap.isOpened():
         ret, frame = cap.read()
@@ -23,7 +26,7 @@ def main():
         
         #output = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         if flag == 0:
-            authenticator = IAMAuthenticator('{api-key}')
+            authenticator = IAMAuthenticator(api_key)
             visual_recognition = VisualRecognitionV3(
                 version='2018-03-19',
                 authenticator=authenticator
