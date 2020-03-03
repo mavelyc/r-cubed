@@ -9,20 +9,20 @@ config.read('config.properties')
 api_key = config.get('API', 't2s_key')
 api_url = config.get('API', 't2s_url')
 
+def play_sound(phrase):
+    authenticator = IAMAuthenticator(api_key)
+    text_to_speech = TextToSpeechV1(
+        authenticator=authenticator
+    )
 
-authenticator = IAMAuthenticator(api_key)
-text_to_speech = TextToSpeechV1(
-    authenticator=authenticator
-)
+    text_to_speech.set_service_url(api_url)
 
-text_to_speech.set_service_url(api_url)
+    with open('speech.mp3', 'wb+') as audio_file:
+        audio_file.write(
+            text_to_speech.synthesize(
+                phrase,
+                voice='en-US_AllisonVoice',
+                accept='audio/mp3'        
+            ).get_result().content)
 
-with open('speech.mp3', 'wb+') as audio_file:
-    audio_file.write(
-        text_to_speech.synthesize(
-            'compost',
-            voice='en-US_AllisonVoice',
-            accept='audio/mp3'        
-        ).get_result().content)
-
-playsound('speech.mp3')
+    playsound('speech.mp3')
