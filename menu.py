@@ -1,24 +1,11 @@
 import tkinter
-from tkinter import Button
-from ibm_watson.compare_comply_v1 import Label
+from start import start_camera
 
 def make_menu():
     m=tkinter.Tk()
-
-    m.title("r-cubed")
-
-    lbl = Label(m, text="images")
-
-    lbl.grid(column=0, row=0)
-
-    btn = Button(m, text="Capture image")
-
-    def clicked():
-            
-        lbl.configure(text="Image clicked")
-
-    btn.grid(column=1, row=0)
-
+    m.title('R-cubed')
+    startButton = tkinter.Button(m, text='Start', width=25, command=start_camera) 
+    button = tkinter.Button(m, text='Exit', width=25, command=m.destroy) 
+    button.pack() 
+    startButton.pack()
     m.mainloop()
-
-
