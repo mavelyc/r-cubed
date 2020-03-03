@@ -8,8 +8,8 @@ config = configparser.RawConfigParser()
 config.read('config.properties')
 
 ss_fps = int(config.get('API', 'ss_fps'))
-api_key = config.get('API', 'key')
-api_url = config.get('API', 'url')
+api_key = config.get('API', 'vr_key')
+api_url = config.get('API', 'vr_url')
 
 def start_camera():
 
