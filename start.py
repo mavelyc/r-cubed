@@ -44,7 +44,7 @@ def start_camera():
                 classes = visual_recognition.classify(
                     images_file=image,
                     threshold='0.6',
-                    ).get_result()
+                    classifier_ids='DefaultCustomModel_663415636').get_result()
                 print(json.dumps(classes, indent=2))
 
         
