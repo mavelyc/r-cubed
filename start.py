@@ -12,7 +12,21 @@ api_key = config.get('API', 'vr_key')
 api_url = config.get('API', 'vr_url')
 
 def parse_json(json):
-    print(json["images"][0]["classifiers"][0]["classes"])
+    score = 0
+    category = ""
+    probabilities = json["images"][0]["classifiers"][0]["classes"]
+    if len(probabilities) > 1:
+        for obj in probabilities:
+            if obj['score'] > score:
+                score = obj['score']
+                category = obj['class']
+    else:
+        score = probabilities[0]['score']
+        category = probabilities[0]['class']
+
+    print(category, score)
+
+
 
 def start_camera():
 
