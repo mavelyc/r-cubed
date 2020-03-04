@@ -3,6 +3,9 @@ import json
 import configparser
 from ibm_watson import VisualRecognitionV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+from tkinter import *
+from PIL import ImageTk, Image
+#from menu import make_menu
 
 config = configparser.RawConfigParser()
 config.read('config.properties')
@@ -15,7 +18,9 @@ def parse_json(json):
     score = 0
     category = ""
     probabilities = json["images"][0]["classifiers"][0]["classes"]
-    if len(probabilities) > 1:
+    if len(probabilities) == 0:
+        print("human")
+    elif len(probabilities) > 1:
         for obj in probabilities:
             if obj['score'] > score:
                 score = obj['score']
@@ -25,10 +30,31 @@ def parse_json(json):
         category = probabilities[0]['class']
 
     print(category, score)
-
+    return category
 
 
 def start_camera():
+
+    m=Tk()
+    m.title('R-cubed')
+    
+    m.attributes("-fullscreen", True)
+
+
+    screen_w = m.winfo_screenwidth()
+    screen_h = m.winfo_screenheight()
+
+
+    top_frame = Frame(m)
+
+    label = Label(top_frame, text='Let us organize your waste!', font=("Helvetica", 30), bg='limegreen')
+    label.pack(fill=X)
+    top_frame.pack(fill=X)
+
+    img = ImageTk.PhotoImage(Image.open("recycle_vs_organic.jpg").resize(
+        (screen_w, screen_h - 250), Image.ANTIALIAS))
+    img_panel = Label(m, image = img)
+    img_panel.pack(fill = X, expand = "yes")
 
     windowName = "Live Video Feed"
     cv2.namedWindow(windowName)
@@ -62,8 +88,19 @@ def start_camera():
                     images_file=image,
                     threshold='0.6',
                     classifier_ids='DefaultCustomModel_663415636').get_result()
-                parse_json(classes)
+                category = parse_json(classes)
 
+                if category == 'Organic':
+                    img = ImageTk.PhotoImage(Image.open("trash1.jpg").resize(
+                        (screen_w, screen_h - 250), Image.ANTIALIAS))
+                    img_panel.configure(image=img)
+                    img_panel.image = img
+                elif category == 'Recyclable':
+                    img = ImageTk.PhotoImage(Image.open("metal1.jpg").resize(
+                        (screen_w, screen_h - 250), Image.ANTIALIAS))   
+                    img_panel.configure(image=img)
+                    img_panel.image = img
+                m.update()
         
         cv2.imshow("Original Webcam Feed", frame)
         
@@ -75,4 +112,6 @@ def start_camera():
 
     cv2.destroyAllWindows()
     cap.release()
+    m.mainloop()
     
+#make_menu()
