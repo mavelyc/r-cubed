@@ -30,12 +30,15 @@ def make_menu():
 
     button_frame = Frame(m, width=screen_w)
 
-    startButton = Button(button_frame, text='Start', width=45, height=15, font=("Helvetica", 60), highlightbackground='lawn green', command=start_camera) 
+    startButton = Button(button_frame, text='Start', width=45, height=15, font=("Helvetica", 60), highlightbackground='lawn green', command= lambda:merge_functions(m)) 
     button = Button(button_frame, text='Exit', height=15, font=("Helvetica", 60), highlightbackground='red', command=m.destroy)
     startButton.pack(in_=button_frame, side=LEFT, fill=BOTH, expand=True)
     button.pack(in_=button_frame, side=RIGHT, fill=BOTH, expand=True)
     button_frame.pack(fill = X)
-
     
-
     m.mainloop()
+
+
+def merge_functions(m):
+    m.destroy()
+    start_camera()
