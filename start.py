@@ -19,7 +19,9 @@ def parse_json(json):
     score = 0
     category = ""
     probabilities = json["images"][0]["classifiers"][0]["classes"]
-    if len(probabilities) > 1:
+    if len(probabilities) == 0:
+        return
+    elif len(probabilities) > 1:
         for obj in probabilities:
             if obj['score'] > score:
                 score = obj['score']
@@ -32,7 +34,6 @@ def parse_json(json):
             play_sound(category)
 
     print(category, score)
-    play_sound(category)
     return category
 
 
