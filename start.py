@@ -29,7 +29,7 @@ def parse_json(json):
         category = probabilities[0]['class']
 
     if category != 'Human':
-            play_sound(category, score)
+            play_sound(category)
 
     print(category, score)
     play_sound(category)
