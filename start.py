@@ -15,17 +15,17 @@ def parse_json(json):
     score = 0
     category = ""
     probabilities = json["images"][0]["classifiers"][0]["classes"]
-    if len(probabilities) > 1:
+    elif len(probabilities) > 1:
         for obj in probabilities:
             if obj['score'] > score:
-                score = obj['score']
-                category = obj['class']
+                if obj['class'] != 'People Faces':
+                    score = obj['score']
+                    category = obj['class']
     else:
         score = probabilities[0]['score']
         category = probabilities[0]['class']
-
+    
     print(category, score)
-
 
 
 def start_camera():
