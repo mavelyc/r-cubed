@@ -91,13 +91,18 @@ def start_camera():
                 category = parse_json(classes)
 
                 if category == 'Organic':
-                    img = ImageTk.PhotoImage(Image.open("trash1.jpg").resize(
-                        (screen_w, screen_h - 250), Image.ANTIALIAS))
+                    img = ImageTk.PhotoImage(Image.open("organic.png").resize(
+                        (int(screen_w/2.5), screen_h - 250), Image.ANTIALIAS))
                     img_panel.configure(image=img)
                     img_panel.image = img
                 elif category == 'Recyclable':
-                    img = ImageTk.PhotoImage(Image.open("metal1.jpg").resize(
-                        (screen_w, screen_h - 250), Image.ANTIALIAS))   
+                    img = ImageTk.PhotoImage(Image.open("recyclable.png").resize(
+                        (int(screen_w/2.5), screen_h - 250), Image.ANTIALIAS))   
+                    img_panel.configure(image=img)
+                    img_panel.image = img
+                elif category == 'Garbage':
+                    img = ImageTk.PhotoImage(Image.open("garbage.png").resize(
+                        (int(screen_w/2.5), screen_h - 250), Image.ANTIALIAS))   
                     img_panel.configure(image=img)
                     img_panel.image = img
                 m.update()
