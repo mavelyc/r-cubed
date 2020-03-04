@@ -2,3 +2,4 @@ apikey
 frame.jpg
 config.properties
 speech.mp3
+__pycache__
