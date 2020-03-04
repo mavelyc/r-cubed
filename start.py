@@ -6,6 +6,7 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from tkinter import *
 from PIL import ImageTk, Image
 #from menu import make_menu
+from text_to_speech import play_sound
 
 config = configparser.RawConfigParser()
 config.read('config.properties')
@@ -18,9 +19,7 @@ def parse_json(json):
     score = 0
     category = ""
     probabilities = json["images"][0]["classifiers"][0]["classes"]
-    if len(probabilities) == 0:
-        print("human")
-    elif len(probabilities) > 1:
+    if len(probabilities) > 1:
         for obj in probabilities:
             if obj['score'] > score:
                 score = obj['score']
@@ -29,7 +28,11 @@ def parse_json(json):
         score = probabilities[0]['score']
         category = probabilities[0]['class']
 
+    if category != 'Human':
+            play_sound(category, score)
+
     print(category, score)
+    play_sound(category)
     return category
 
 
