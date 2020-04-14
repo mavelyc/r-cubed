@@ -14,6 +14,7 @@ config.read('config.properties')
 ss_fps = int(config.get('API', 'ss_fps'))
 api_key = config.get('API', 'vr_key')
 api_url = config.get('API', 'vr_url')
+model = config.get('API', 'model_id')
 
 def parse_json(json):
     score = 0
@@ -36,6 +37,10 @@ def parse_json(json):
     print(category, score)
     return category
 
+def get_image(filename, screen_w, screen_h):
+    img = ImageTk.PhotoImage(Image.open(filename).resize(
+        (int(screen_w/2.5), screen_h - 250), Image.ANTIALIAS))
+    return img
 
 def start_camera():
 
@@ -79,6 +84,7 @@ def start_camera():
         
         #output = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         if flag == 0:
+
             authenticator = IAMAuthenticator(api_key)
             visual_recognition = VisualRecognitionV3(
                 version='2018-03-19',
@@ -88,27 +94,25 @@ def start_camera():
             visual_recognition.set_service_url(api_url)
 
             with open('./frame.jpg', 'rb') as image:
+
                 classes = visual_recognition.classify(
                     images_file=image,
                     threshold='0.6',
-                    classifier_ids='DefaultCustomModel_663415636').get_result()
+                    classifier_ids=model).get_result()
+
                 category = parse_json(classes)
 
                 if category == 'Organic':
-                    img = ImageTk.PhotoImage(Image.open("organic.png").resize(
-                        (int(screen_w/2.5), screen_h - 250), Image.ANTIALIAS))
-                    img_panel.configure(image=img)
-                    img_panel.image = img
+                    img = get_image("organic.png", screen_w, screen_h)
                 elif category == 'Recyclable':
-                    img = ImageTk.PhotoImage(Image.open("recyclable.png").resize(
-                        (int(screen_w/2.5), screen_h - 250), Image.ANTIALIAS))   
-                    img_panel.configure(image=img)
-                    img_panel.image = img
-                elif category == 'Garbage':
-                    img = ImageTk.PhotoImage(Image.open("garbage.png").resize(
-                        (int(screen_w/2.5), screen_h - 250), Image.ANTIALIAS))   
-                    img_panel.configure(image=img)
-                    img_panel.image = img
+                    img = get_image("recyclable.png", screen_w, screen_h)
+
+                # Current model does not have Garbage class
+                #elif category == 'Garbage':
+                #    img = get_image("garbage.png", screen_w, screen_h)
+
+                img_panel.configure(image=img)
+                img_panel.image = img
                 m.update()
         
         cv2.imshow("Original Webcam Feed", frame)
